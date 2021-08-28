@@ -53,9 +53,13 @@
          */
         createElements: function () {
             // Create main html container for the calendar
+            var outter_container = document.createElement('div');
+            outter_container.classList = 'container col-lg-12 col-md-12 mb-12'
+
             var container = document.createElement('div');
-            container.className = 'calendar-heatmap';
-            document.body.appendChild(container);
+            container.className = 'calendar-heatmap col-lg-12 col-md-12';
+            outter_container.appendChild(container);
+            document.body.appendChild(outter_container);
 
             // Create svg element
             var svg = d3.select(container).append('svg')
