@@ -1,0 +1,5 @@
+.security
+__pycache__
+venv/
+output/
+games.cache
