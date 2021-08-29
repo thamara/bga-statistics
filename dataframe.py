@@ -3,7 +3,9 @@ import json
 import logging
 import pathlib
 import re
+from typing import Dict
 
+import matplotlib.pyplot as plt
 import pandas as pd
 
 from logging_config import config_logger
@@ -48,6 +50,39 @@ def duration_to_timedelta(duration):
         return
 
     return datetime.timedelta(**{parameter: int(duration) for parameter, duration in match.groupdict().items()})
+
+
+def get_time_by_player(games_df):
+    time_by_player = dict()
+    for _, row in games_df.iterrows():
+        for player in row["player_names"].split(","):
+            time_by_player[player] = time_by_player.get(player, 0) + int(
+                duration_to_timedelta(row["duration"]).total_seconds()
+            )
+    return time_by_player
+
+
+def group_smaller_values(value_by_label: Dict, max_values=10):
+    if len(value_by_label) <= max_values:
+        return value_by_label
+
+    reduced_dict = dict(value_by_label)
+    for key, value in sorted(reduced_dict.items(), key=lambda item: item[1])[:-max_values]:
+        reduced_dict["others"] = reduced_dict.get("others", 0) + value
+        del reduced_dict[key]
+    return reduced_dict
+
+
+def pie_chart(value_by_label: Dict):
+    fig, ax = plt.subplots()
+    size = 0.3
+    _, texts = ax.pie(
+        value_by_label.values(), labels=value_by_label.keys(), radius=1, wedgeprops=dict(width=size, edgecolor="w")
+    )
+    for text in texts:
+        text.set_color("white")
+
+    return fig
 
 
 if __name__ == "__main__":
