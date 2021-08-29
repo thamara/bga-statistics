@@ -1,3 +1,5 @@
+# The list of games and their name and pretty names can be found by
+# parsing/regexping https://en.doc.boardgamearena.com/Help
 pretty_game_names = {
     "thirteenclues": "13 Clues",
     "sechsnimmt": "6 nimmt!",
