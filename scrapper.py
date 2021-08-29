@@ -19,7 +19,7 @@ def get_user_info():
             email = input("BGA Email: ")
         if not password:
             password = getpass.getpass(prompt="Password: ")
-    return password, email
+    return email, password
 
 
 GAMES_CACHE = "games.cache"
