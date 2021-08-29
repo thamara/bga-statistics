@@ -38,7 +38,7 @@ class Stats():
             if 'total' not in ret[day_date_str]:
                 ret[day_date_str]['total'] = 0
             
-            ret[day_date_str]['details'].append({"name": game.game_name, "date": str(game.start.isoformat()), "value": game.duration.total_seconds()})
+            ret[day_date_str]['details'].append({"name": game.pretty_game_name, "date": str(game.start.isoformat()), "value": game.duration.total_seconds()})
             ret[day_date_str]['total'] += game.duration.total_seconds()
 
         correct_ret = []
