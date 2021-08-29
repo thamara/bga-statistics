@@ -59,7 +59,7 @@
             var container = document.createElement('div');
             container.className = 'calendar-heatmap col-lg-12 col-md-12';
             outter_container.appendChild(container);
-            document.body.appendChild(outter_container);
+            document.getElementById('heatmap-placeholder').appendChild(outter_container);
 
             // Create svg element
             var svg = d3.select(container).append('svg')
