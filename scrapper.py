@@ -14,7 +14,7 @@ def get_user_info():
             security_json = json.load(security)
             password = security_json["password"]
             email = security_json["email"]
-    except:
+    except KeyError:
         if not email:
             email = input("BGA Email: ")
         if not password:
