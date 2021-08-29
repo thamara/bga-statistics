@@ -1,5 +1,6 @@
 from collections import defaultdict
 import datetime
+import math
 
 class Stats():
     def __init__(self, games) -> None:
@@ -10,6 +11,7 @@ class Stats():
         self.different_games = set()
         self.total_time_played = datetime.timedelta(0)
         self.total_time_by_date = defaultdict(datetime.timedelta)
+        self.total_time_by_game = defaultdict(datetime.timedelta)
 
         for game in games:
             self.__update_stats(game)
@@ -19,6 +21,7 @@ class Stats():
         self.different_games_count = len(self.different_games)
         self.total_time_played += game.duration
         self.total_time_by_date[game.start.date().strftime('%Y-%m-%d')] += game.duration
+        self.total_time_by_game[game.pretty_game_name] += game.duration
         # self.total_time_by_date[game.start.timestamp()] += game.duration
 
     def get_total_time_by_date_json(self):
@@ -45,3 +48,6 @@ class Stats():
         for item in ret.keys():
             correct_ret.append({'date': item, 'details': ret[item]['details'], 'total': ret[item]['total']})
         return correct_ret
+
+    def get_normalized_time_by_game(self):
+        return [{'text': game, "size": int(self.total_time_by_game[game].total_seconds()/500)} for game in self.total_time_by_game.keys()]

@@ -98,6 +98,10 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .word-cloud {
+            display: block;
+            margin: auto;
+        }
     </style>
     <script>
         $(document).ready(function() {
@@ -156,6 +160,41 @@
         // Initialize calendar heatmap
         const data = {{ heatmap_data }};
         calendarHeatmap.init(data, color, overview, print);
+    </script>
+
+    {% include 'wordcloud.html' %}
+    <div id="word-cloud" class="d-flex justify-content-center mb-5"></div>
+    <script>
+        var frequency_list = {{ normalized_game_time }};
+        function color(){
+            const colors = ['#9b5de5','#f15bb5','#fee440','#00bbf9','#00f5d4','#2b2d42'];
+            return colors[Math.floor(Math.random()*colors.length)]
+        };
+        d3.layout.cloud().size([900, 450])
+                .words(frequency_list)
+                .rotate(0)
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw)
+                .start();
+        function draw(words) {
+            d3.select("#word-cloud").append("svg")
+                    .attr("width", 900)
+                    .attr("height", 450)
+                    .attr("class", "wordcloud")
+                    .append("g")
+                    // without the transform, words words would get cutoff to the left and top, they would
+                    // appear outside of the SVG area
+                    .attr("transform", "translate(300,200)")
+                    .selectAll("text")
+                    .data(words)
+                    .enter().append("text")
+                    .style("font-size", function(d) { return d.size + "px"; })
+                    .style("fill", function(d, i) { return color(i); })
+                    .attr("transform", function(d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .text(function(d) { return d.text; });
+        }
     </script>
 
     <div class="container mb-3">

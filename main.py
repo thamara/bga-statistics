@@ -16,7 +16,9 @@ logging.info(f'Number of games played: {stats.number_of_games}')
 file_loader = FileSystemLoader('templates')
 env = Environment(loader=file_loader)
 template = env.get_template('stats.html')
-output = template.render(stats=stats, heatmap_data=stats.get_games_by_date())
+output = template.render(stats=stats, 
+                         heatmap_data=stats.get_games_by_date(),
+                         normalized_game_time=stats.get_normalized_time_by_game())
 
 filename = "output/stats.html"
 os.makedirs(os.path.dirname(filename), exist_ok=True)
