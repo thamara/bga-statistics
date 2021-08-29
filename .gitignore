@@ -1,5 +1,11 @@
-.security
+# python
 __pycache__
 venv/
+
+# data files
+.security
 output/
-games.cache
+.cache/
+
+# vscode
+.vscode
