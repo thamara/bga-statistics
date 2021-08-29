@@ -1,9 +1,11 @@
-from models import Game
 import getpass
 import json
 import logging
+import pathlib
 import pickle
 import requests
+
+from models import Game
 
 
 def get_user_info():
@@ -22,12 +24,13 @@ def get_user_info():
     return email, password
 
 
-GAMES_CACHE = "games.cache"
+CACHE = pathlib.Path(".cache")
+GAMES_CACHE = CACHE / "games"
 
 
-def get_cached_info():
+def get_cached_info(player_id):
     try:
-        with open(GAMES_CACHE, "rb") as f:
+        with (GAMES_CACHE / f"{player_id}").open("rb") as f:
             games = pickle.load(f)
         logging.info(f"Loaded cached games ({len(games)} in total)")
         return games
@@ -37,7 +40,7 @@ def get_cached_info():
 
 def retrieve_games(player_id, use_cache=True, max_pages=100):
     if use_cache:
-        games = get_cached_info()
+        games = get_cached_info(player_id)
         if games:
             return games
 
@@ -88,6 +91,7 @@ def retrieve_games(player_id, use_cache=True, max_pages=100):
                     )
                 )
 
-    with open(GAMES_CACHE, "wb") as f:
+    GAMES_CACHE.mkdir(parents=True, exist_ok=True)
+    with (GAMES_CACHE / f"{player_id}").open("wb") as f:
         pickle.dump(games, f)
     return games
