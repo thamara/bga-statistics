@@ -1,4 +1,5 @@
 import datetime
+from prettifier import get_pretty_name
 
 class Game:
     """ Represents a table (or game). Example of json:
@@ -14,6 +15,7 @@ class Game:
     def __init__(self, table_id, game_name, game_id, start, end, players, player_names, scores, ranks) -> None:
         self.table_id = table_id
         self.game_name = game_name
+        self.pretty_game_name = get_pretty_name(self.game_name)
         self.game_id = game_id
         self.start = datetime.datetime.fromtimestamp(int(start))
         self.end = datetime.datetime.fromtimestamp(int(end))
